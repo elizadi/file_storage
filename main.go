@@ -29,10 +29,6 @@ import (
 //	err = s.Storage.S
 //}
 
-//func (s *server) GetPhotosList(ctx context.Context, in *kitty.GetPhotoRequest) (*kitty.GetPhotoResponse, error) {
-//
-//}
-
 func main() {
 	log := logger.New()
 	//log.SetFormatter(&logger.TextFormatter{})
@@ -59,20 +55,20 @@ func main() {
 	}
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", conf.Port))
 	if err != nil {
-		log.Errorf("failed to listen: %v", err)
+		log.WithError(err).Errorln("failed to listen")
 		os.Exit(1)
 	}
 	ctx := context.Background()
 	storage, err := storage.New(ctx, conf.DB_URL, log)
 	if err != nil {
-		log.Errorf("failed to connect db: %v", err)
+		log.WithError(err).Errorln("failed to connect db")
 		os.Exit(1)
 	}
 
-	if _, err := os.Stat(usecase.Directory); os.IsNotExist(err) {
+	if _, err = os.Stat(usecase.Directory); os.IsNotExist(err) {
 		createDirErr := os.Mkdir(usecase.Directory, 0777)
 		if createDirErr != nil {
-			log.Errorf("failed to create dir: %v", createDirErr)
+			log.WithError(createDirErr).Errorln("failed to create dir")
 			os.Exit(1)
 		}
 	}

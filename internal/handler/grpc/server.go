@@ -45,7 +45,7 @@ func NewServer(uc *usecase.UseCase, cfg *usecase.Config, log *logger.Logger) (*g
 func (s *server) GetPhoto(ctx context.Context, in *GetPhotoRequest) (*GetPhotoResponse, error) {
 	limiter, err := s.limiterDownload(ctx)
 	if err != nil {
-		s.log.Errorf("Limited connecton: %v", err)
+		s.log.WithError(err).Errorln("Limited connection")
 		return nil, err
 	}
 	err = limiter.Acquire()
@@ -54,19 +54,20 @@ func (s *server) GetPhoto(ctx context.Context, in *GetPhotoRequest) (*GetPhotoRe
 	}
 	defer limiter.Release()
 
-	photo, err := s.uc.GetPhoto(ctx, in.Id)
+	photo, name, err := s.uc.GetPhoto(ctx, in.Id)
 	if err != nil {
 		return nil, err
 	}
 	return &GetPhotoResponse{
 		Photo: photo,
+		Name:  name,
 	}, nil
 }
 
 func (s *server) PostPhoto(ctx context.Context, in *PostPhotoRequest) (*Empty, error) {
 	limiter, err := s.limiterDownload(ctx)
 	if err != nil {
-		s.log.Errorf("Limited connecton: %v", err)
+		s.log.WithError(err).Errorln("Limited connection")
 		return nil, err
 	}
 	err = limiter.Acquire()
@@ -85,7 +86,7 @@ func (s *server) PostPhoto(ctx context.Context, in *PostPhotoRequest) (*Empty, e
 func (s *server) GetAllPhotosInfo(ctx context.Context, _ *Empty) (*GetPhotosInfoResponse, error) {
 	limiter, err := s.limiterView(ctx)
 	if err != nil {
-		s.log.Errorf("Limited connecton: %v", err)
+		s.log.WithError(err).Errorln("Limited connection")
 		return nil, err
 	}
 	err = limiter.Acquire()

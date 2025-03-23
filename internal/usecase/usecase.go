@@ -26,20 +26,20 @@ func New(storage storage.Storage, log *logger.Logger) (*UseCase, error) {
 	}, nil
 }
 
-func (s *UseCase) GetPhoto(ctx context.Context, id uint64) ([]byte, error) {
+func (s *UseCase) GetPhoto(ctx context.Context, id uint64) ([]byte, string, error) {
 	s.log.Info("Star get photo")
-	path, err := s.storage.GetPhotoPath(ctx, id)
+	path, name, err := s.storage.GetPhotoPath(ctx, id)
 	if err != nil {
 		s.log.Errorf("Error get photo path: %v", err)
-		return nil, err
+		return nil, "", err
 	}
 	photo, err := os.ReadFile(path)
 	if err != nil {
 		s.log.Errorf("Error get photo: %v", err)
-		return nil, err
+		return nil, "", err
 	}
 	s.log.Info("Get photo")
-	return photo, nil
+	return photo, name, nil
 }
 
 func (s *UseCase) PostPhoto(ctx context.Context, name string, photo []byte) error {
