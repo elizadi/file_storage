@@ -34,7 +34,7 @@ func main() {
 	c := grpc2.NewFileStorageClient(conn)
 
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	//r, err := c.SayHello(ctx, &kitty.HelloRequest{Name: *name})
 	//if err != nil {

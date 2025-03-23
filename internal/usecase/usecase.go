@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-const (
-	Directory = "/downloadedFiles"
+var (
+	Directory = filepath.Dir("/downloadedFiles/")
 )
 
 type UseCase struct {
