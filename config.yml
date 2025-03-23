@@ -1,0 +1,1 @@
+DB_URL: "postgresql://user:user@localhost:5432/file_storage"

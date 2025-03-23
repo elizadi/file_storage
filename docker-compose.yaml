@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: file_storage
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    ports:
+      - "5432:5432"
+  storage:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      DB_URL: postgres
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    networks:
+      - default

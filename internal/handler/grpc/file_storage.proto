@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option go_package = "internal/handler/grpc/grpc";
+
+package grpc;
+
+import "google/protobuf/timestamp.proto";
+
+
+service FileStorage {
+  rpc GetPhoto (GetPhotoRequest) returns (GetPhotoResponse) {}
+  rpc GetAllPhotosInfo (Empty) returns (GetPhotosInfoResponse) {}
+  rpc PostPhoto (PostPhotoRequest) returns (Empty) {}
+  rpc PostPhotos (PostPhotosRequest) returns (Empty) {}
+}
+
+message Empty {}
+
+message GetPhotoRequest {
+  uint64 id = 1;
+}
+
+message GetPhotosRequest {
+  repeated string names = 1;
+}
+
+message GetPhotoResponse {
+  bytes photo = 1;
+}
+
+message MetaData {
+  uint64 id = 1;
+  string name = 2;
+  google.protobuf.Timestamp created = 3;
+  google.protobuf.Timestamp edited = 4;
+  string extension = 5;
+}
+
+message GetPhotosInfoResponse {
+  repeated MetaData fileInfo = 1;
+}
+
+message PostPhotoRequest {
+  string name = 1;
+  string extension = 2;
+  bytes photo = 3;
+}
+
+message PostPhotosRequest {
+  repeated PostPhotoRequest photos = 1;
+}
+
+message CreateOrReadyResponse{
+  bool ok = 1;
+}
