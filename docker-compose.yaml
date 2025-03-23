@@ -13,7 +13,7 @@ services:
       dockerfile: Dockerfile
       context: .
     environment:
-      DB_URL: postgres
+      DB_URL: "postgresql://user:user@postgres:5432/file_storage"
     ports:
       - 8000:8000
     depends_on:
@@ -22,3 +22,4 @@ services:
       - postgres
     networks:
       - default
+    restart: on-failure:5

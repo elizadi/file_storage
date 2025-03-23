@@ -35,17 +35,21 @@ import (
 
 func main() {
 	log := logger.New()
+	//log.SetFormatter(&logger.TextFormatter{})
+	//log.SetLevel(logger.TraceLevel)
 	conf, err := usecase.NewConfig("", log)
+	//log.Traceln("Directory", usecase.Directory)
 	if err != nil {
-		log.Errorf("Error create config: %v\n", err)
-		return
+		log.WithError(err).Errorln("Error create config")
+		os.Exit(1)
 	}
 	if conf.Port == 0 {
 		conf.Port = 8000
 	}
+	//log.Traceln("url", conf.DB_URL)
 	if conf.DB_URL == "" {
 		log.Errorf("Error get DB URL")
-		return
+		os.Exit(1)
 	}
 	if conf.LimitView <= 0 {
 		conf.LimitView = 100
@@ -55,34 +59,37 @@ func main() {
 	}
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", conf.Port))
 	if err != nil {
-		logger.Fatalf("failed to listen: %v", err)
+		log.Errorf("failed to listen: %v", err)
+		os.Exit(1)
 	}
 	ctx := context.Background()
 	storage, err := storage.New(ctx, conf.DB_URL, log)
 	if err != nil {
-		logger.Fatalf("failed to connect db: %v", err)
+		log.Errorf("failed to connect db: %v", err)
+		os.Exit(1)
 	}
 
 	if _, err := os.Stat(usecase.Directory); os.IsNotExist(err) {
 		createDirErr := os.Mkdir(usecase.Directory, 0777)
-		if err != nil {
-			logger.Fatalf("failed to create dir: %v", createDirErr)
+		if createDirErr != nil {
+			log.Errorf("failed to create dir: %v", createDirErr)
+			os.Exit(1)
 		}
 	}
 
 	uc, err := usecase.New(storage, log)
 	if err != nil {
 		log.WithError(err).Errorln("error creating usecase")
-		return
+		os.Exit(1)
 	}
 	s, err := grpc.NewServer(uc, conf, log)
 	if err != nil {
 		log.WithError(err).Errorln("error creating server")
-		return
+		os.Exit(1)
 	}
 	log.Infof("server listening at %v\n", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.WithError(err).Errorln("failed to serve")
-		return
+		os.Exit(1)
 	}
 }
