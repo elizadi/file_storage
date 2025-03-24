@@ -78,19 +78,6 @@ func (s *Storage) SavePhoto(ctx context.Context, name, path string, created time
 	return nil
 }
 
-//func (r *Storage) SaveBatchPhotos(ctx context.Context, args [][]interface{}) error {
-//	copyCount, err := r.connect.CopyFrom(
-//		ctx,
-//		pgx.Identifier{"Photos"},
-//		[]string{"name", "create", "edite", "file_path"},
-//		pgx.CopyFromRows(args),
-//	)
-//	if err != nil {
-//		return err
-//	}
-//
-//}
-
 // GetAllPhotosInfo - get photo`s info (such as id, name, created date and edited date) from table photo for all photos
 func (s *Storage) GetAllPhotosInfo(ctx context.Context) ([]*types.MetaData, error) {
 	connection, err := s.pool.Acquire(context.Background())

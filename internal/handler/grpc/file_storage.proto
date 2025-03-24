@@ -20,10 +20,6 @@ message GetPhotoRequest {
   uint64 id = 1;
 }
 
-message GetPhotosRequest {
-  repeated string names = 1;
-}
-
 message GetPhotoResponse {
   bytes photo = 1;
   string name = 2;
@@ -49,8 +45,4 @@ message PostPhotoRequest {
 
 message PostPhotosRequest {
   repeated PostPhotoRequest photos = 1;
-}
-
-message CreateOrReadyResponse{
-  bool ok = 1;
 }

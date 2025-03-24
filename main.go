@@ -11,30 +11,10 @@ import (
 	"os"
 )
 
-//func (s *server) PostPhotos(ctx context.Context, in *kitty.PostPhotosRequest) (*kitty.Empty, error) {
-//	paths := []string{}
-//	argsForDB := [][]interface{}{}
-//	for _, photo := range in.Photos {
-//		path := fmt.Sprintf("%s/%s%s", Directory, photo.MetaData.Name, photo.MetaData.Extension)
-//		err := os.WriteFile(path, photo.Photo, 0644)
-//		if err != nil {
-//			log.Printf("Error save file %s%s: %v", photo.MetaData.Name, photo.MetaData.Extension, err)
-//			return nil, err
-//		}
-//		paths = append(paths, path)
-//		arg := []interface{}{photo.MetaData.Name, photo.MetaData.Created, photo.MetaData.Edited, path}
-//		argsForDB = append(argsForDB, arg)
-//	}
-//
-//	err = s.Storage.S
-//}
-
 func main() {
 	log := logger.New()
-	//log.SetFormatter(&logger.TextFormatter{})
-	//log.SetLevel(logger.TraceLevel)
+
 	conf, err := usecase.NewConfig("", log)
-	//log.Traceln("Directory", usecase.Directory)
 	if err != nil {
 		log.WithError(err).Errorln("Error create config")
 		os.Exit(1)
@@ -42,7 +22,7 @@ func main() {
 	if conf.Port == 0 {
 		conf.Port = 8000
 	}
-	//log.Traceln("url", conf.DB_URL)
+
 	if conf.DB_URL == "" {
 		log.Errorf("Error get DB URL")
 		os.Exit(1)

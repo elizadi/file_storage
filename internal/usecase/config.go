@@ -36,8 +36,8 @@ func NewConfig(filePath string, log *logger.Logger) (*Config, error) {
 }
 
 type Config struct {
-	LimitView     int
-	LimitDownload int
+	LimitView     int //limit on the number of simultaneous connections from a client to view the file list
+	LimitDownload int //limit on the number of simultaneous connections from a client to download or upload files
 	Port          int
 	DB_URL        string
 }
