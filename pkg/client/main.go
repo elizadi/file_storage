@@ -98,9 +98,9 @@ var getAllInfoCmd = &cobra.Command{
 			logger.WithError(err).Errorln("could not get all photos info")
 		}
 
-		fmt.Println("Имя файла | Дата создания | Дата обновления")
+		fmt.Println("ID | Имя файла | Дата создания | Дата обновления")
 		for _, fileInfo := range files.FileInfo {
-			fmt.Printf("%s | %v | %v \n", fileInfo.Name, fileInfo.Created.AsTime().Format(time.RFC822), fileInfo.Edited.AsTime().Format(time.RFC822))
+			fmt.Printf("%d | %s | %v | %v \n", fileInfo.Id, fileInfo.Name, fileInfo.Created.AsTime().Format(time.RFC822), fileInfo.Edited.AsTime().Format(time.RFC822))
 		}
 	},
 }

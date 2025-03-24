@@ -24,5 +24,4 @@ services:
       - default
     restart: on-failure:5
     volumes:
-      - /downloadedFiles
-
+      - /downloadedFiles/:/downloadedFiles/
